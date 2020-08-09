@@ -26,6 +26,10 @@ void peekOperations(std::stack<Expression> &operators, std::stack<ASTree *> &res
 
 void peekBracket(std::stack<Expression> &operators, std::stack<ASTree *> &result);
 
-std::string toString(ASTree *tree);
+std::string toString(const ASTree *tree);
+
+std::string toStringInfix(const ASTree *tree);
+
+bool equals(const ASTree *tree1, const ASTree *tree2);
 
 #endif //MATHLOGLAB_ASTREE_H

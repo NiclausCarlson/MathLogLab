@@ -4,7 +4,9 @@
 
 #include "ASTree.h"
 
-ASTree::ASTree(Expression data, ASTree *left, ASTree *right) : data(std::move(data)), left(left), right(right) {}
+#include <utility>
+
+ASTree::ASTree(Expression data, ASTree *left, ASTree *right) : data(std::move(data)),left(left), right(right) {}
 
 void addNode(std::stack<ASTree *> &stack, Expression &op) {
     ASTree *right = stack.top();
@@ -53,7 +55,7 @@ void peekBracket(std::stack<Expression> &operators, std::stack<ASTree *> &result
     operators.pop();
 }
 
-std::string toString(ASTree *tree) {
+std::string toString(const ASTree *tree) {
     if (tree->data.getId() == "&") {
         std::string tmp1 = toString(tree->left);
         std::string tmp2 = toString(tree->right);
@@ -71,4 +73,36 @@ std::string toString(ASTree *tree) {
     } else {
         return tree->data.getId();
     }
+}
+
+std::string toStringInfix(const ASTree *tree) {
+    if (tree->data.getId() == "&") {
+        std::string tmp1 = toStringInfix(tree->left);
+        std::string tmp2 = toStringInfix(tree->right);
+        return "(" + tmp1 + " & " + tmp2 + ")";
+    } else if (tree->data.getId() == "|") {
+        std::string tmp1 = toStringInfix(tree->left);
+        std::string tmp2 = toStringInfix(tree->right);
+        return "(" + tmp1 + " | " + tmp2 + ")";
+    } else if (tree->data.getId() == "->") {
+        std::string tmp1 = toStringInfix(tree->left);
+        std::string tmp2 = toStringInfix(tree->right);
+        return "(" + tmp1 + " -> " + tmp2 + ")";
+    } else if (tree->data.getId() == "!") {
+        return "!" + toStringInfix(tree->left);
+    } else {
+        return tree->data.getId();
+    }
+}
+
+bool equals(const ASTree *tree1, const ASTree *tree2) {
+    if ((tree1 == nullptr) && (tree2 == nullptr)) {
+        return true;
+    }
+    if ((tree1 != nullptr) && (tree2 != nullptr) && tree1->data.getId() == tree2->data.getId()) {
+        bool left = equals(tree1->left, tree2->left);
+        bool right = equals(tree1->right, tree2->right);
+        return left && right;
+    }
+    return false;
 }
