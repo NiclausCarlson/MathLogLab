@@ -8,7 +8,7 @@
 #include "../Expression.h"
 
 struct OpenBracket : public Expression {
-    OpenBracket() : Expression("(", "not", 0) {}
+    OpenBracket() : Expression("(", "none", 0, false) {}
 };
 
 #endif //MATHLOGLAB_OPENBRACKET_H

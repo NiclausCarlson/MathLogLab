@@ -10,7 +10,7 @@
 void printAns() {
     std::string str;
     std::getline(std::cin, str);
-    ASTree *tree = parse(str);
+    ASTree *tree = parse(str, false);
     std::cout << toString(tree) << std::endl;
 }
 

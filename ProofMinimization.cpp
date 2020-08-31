@@ -27,7 +27,7 @@ void parseFirstString(ASTree *&expression, std::string &allContextStr, std::map<
     for (int i = 0; i < allContext.size(); ++i) {
         if (allContext[i] == ',' || i == allContext.size() - 1) {
             std::string tmp = allContext.substr(pos, i - pos);
-            std::string tmp2 = toStringInfix(parse(tmp));
+            std::string tmp2 = toStringInfix(parse(tmp, false));
             context[tmp2] = quantity++;
             allContextStr += tmp2 + ", ";
             pos = i + 1;
@@ -37,7 +37,7 @@ void parseFirstString(ASTree *&expression, std::string &allContextStr, std::map<
             }
         }
     }
-    expression = parse(strExpression);
+    expression = parse(strExpression, false);
 }
 
 bool isHypothesis(ASTree *&proofTree, const std::string &stringProofTree, std::vector<ASTree *> &prevStatements,
@@ -105,7 +105,7 @@ bool check(const std::string &expression, const std::map<std::string, int> &cont
     std::string proofTreeStr;
 
     while (std::getline(std::cin, proofStr) && !proofStr.empty()) {
-        proofTree = parse(proofStr);
+        proofTree = parse(proofStr, false);
         proofTreeStr = toStringInfix(proofTree);
         proven = false;
         if (checkTakes.count(proofTreeStr) == 0) {
@@ -122,7 +122,7 @@ bool check(const std::string &expression, const std::map<std::string, int> &cont
 
             std::pair<std::string, int> axiom;
             //Check Axiom
-            if (!proven && isAxiom(proofTree, axiom)) {
+            if (!proven && isLogicAxiomScheme(proofTree, axiom)) {
                 proof.emplace_back(std::make_pair(axiom.first, std::make_pair(axiom.second, 0)),
                                    proofTreeStr);
                 prevStatements.emplace_back(proofTree);

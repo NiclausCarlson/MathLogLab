@@ -9,7 +9,9 @@
 
 class Expression {
 public:
-    explicit Expression(std::string id, std::string assoc, int priority);
+    Expression();
+
+    Expression(std::string id, std::string assoc, int priority, bool isVariable);
 
     std::string getId() const;
 
@@ -17,9 +19,12 @@ public:
 
     int getPriority() const;
 
+    bool isVariable() const;
+
 private:
     std::string id, assoc;
-    int priority;
+    int priority{};
+    bool isVar{};
 };
 
 

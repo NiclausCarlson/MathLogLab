@@ -8,7 +8,7 @@
 #include "../Expression.h"
 
 struct Implication : public Expression {
-    Implication() : Expression("->", "right", 1) {}
+    Implication() : Expression("->", "right", 1, false) {}
 };
 
 #endif //MATHLOGLAB_IMPLICATION_H

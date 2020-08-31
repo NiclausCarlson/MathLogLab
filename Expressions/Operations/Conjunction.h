@@ -8,7 +8,7 @@
 #include "../Expression.h"
 
 struct Conjunction : public Expression {
-    Conjunction() : Expression("&", "left", 3) {}
+    Conjunction() : Expression("&", "left", 3, false) {}
 };
 
 

@@ -9,8 +9,14 @@
 #include "../ASTree/ASTree.h"
 #include "../Parser/Parser.h"
 
-bool isAxiom(ASTree *tree, std::pair<std::string, int> &axiom);
+bool isLogicAxiomScheme(ASTree *tree, std::pair<std::string, int> &axiom);
 
-std::vector<ASTree *> parseAxiom(ASTree *tree, const int axiomNumber);
+bool isPredicateAxiomScheme(ASTree *tree, std::pair<std::string, int> &axiom);
+
+bool isArithmeticAxiom(ASTree *tree, std::pair<std::string, int> &axiom);
+
+bool isArithmeticAxiomScheme(ASTree *tree, std::pair<std::string, int> &axiom);
+
+bool isTermsEquals(std::vector<const ASTree*>& terms);
 
 #endif //MATHLOGLAB_AXIOMS_H

@@ -4,8 +4,10 @@
 
 #include "Expression.h"
 
-Expression::Expression(std::string id, std::string assoc, int priority) : id(std::move(id)), assoc(std::move(assoc)),
-                                                                          priority(priority) {
+Expression::Expression(std::string id, std::string assoc, int priority, bool isVar) : id(std::move(id)),
+                                                                                      assoc(std::move(assoc)),
+                                                                                      priority(priority),
+                                                                                      isVar(isVar) {
 }
 
 std::string Expression::getId() const {
@@ -18,4 +20,10 @@ std::string Expression::getAssoc() const {
 
 int Expression::getPriority() const {
     return priority;
+}
+
+Expression::Expression() = default;
+
+bool Expression::isVariable() const {
+    return isVar;
 }

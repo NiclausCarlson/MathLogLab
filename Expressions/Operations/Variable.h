@@ -8,7 +8,7 @@
 #include "../Expression.h"
 
 struct Variable : public Expression {
-    explicit Variable(std::string name) : Expression(std::move(name), "left", 0) {}
+    explicit Variable(std::string name) : Expression(std::move(name), "left", 9, true) {}
 };
 
 #endif //MATHLOGLAB_VARIABLE_H

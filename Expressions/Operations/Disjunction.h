@@ -7,7 +7,7 @@
 #include "../Expression.h"
 
 struct Disjunction : public Expression {
-    Disjunction() : Expression("|", "left", 2) {}
+    Disjunction() : Expression("|", "left", 2, false) {}
 };
 
 #endif //MATHLOGLAB_DISJUNCTION_H

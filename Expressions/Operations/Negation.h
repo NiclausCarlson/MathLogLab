@@ -7,7 +7,7 @@
 #include "../Expression.h"
 
 struct Negation : public Expression {
-    Negation() : Expression("!", "right", 4) {}
+    Negation() : Expression("!", "right", 4, false) {}
 };
 
 #endif //MATHLOGLAB_NEGATION_H
