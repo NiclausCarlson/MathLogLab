@@ -19,4 +19,6 @@ bool isArithmeticAxiomScheme(ASTree *tree, std::pair<std::string, int> &axiom);
 
 bool isTermsEquals(std::vector<const ASTree*>& terms);
 
+ASTree* getAxiomTree(int number);
+
 #endif //MATHLOGLAB_AXIOMS_H

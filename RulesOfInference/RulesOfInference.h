@@ -16,12 +16,18 @@ bool isModusPonens(const std::map<std::string, int> &uniqueStatements,
                    std::pair<std::string, std::pair<int, int>> &result, bool searchOrder = false);
 
 int isForAllQuantifierRule(const std::map<std::string, int> &uniqueStatements, ASTree *curStatement,
-                            std::pair<std::string, std::pair<int, int>> &result, const std::string &last);
+                           std::pair<std::string, std::pair<int, int>> &result, const std::string &last);
 
 int isExistQuantifierRule(const std::map<std::string, int> &uniqueStatements, ASTree *curStatement,
-                           std::pair<std::string, std::pair<int, int>> &result, const std::string &last);
+                          std::pair<std::string, std::pair<int, int>> &result, const std::string &last);
 
 bool isQuantifierRule(const std::map<std::string, int> &uniqueStatements, ASTree *curStatement,
                       std::pair<std::string, std::pair<int, int>> &result);
+
+
+void deduction(const std::vector<ASTree *> &proof, const std::vector<ASTree *> &hypo, ASTree *variable,
+               std::vector<ASTree *> &newProof);
+
+void gluing(ASTree *tree, ASTree *withoutNeg, std::vector<ASTree *> &proof);
 
 #endif //MATHLOGLAB_RULESOFINFERENCE_H

@@ -5,7 +5,7 @@
 #include "ASTree.h"
 
 ASTree::ASTree(Expression data, ASTree *left, ASTree *right) : data(std::move(data)), left(left),
-                                                                          right(right) {}
+                                                               right(right) {}
 
 void addNode(std::stack<ASTree *> &stack, Expression &op) {
     ASTree *right = stack.top();
@@ -236,4 +236,64 @@ bool isEqualsWithReplace(char replacedVariable, const ASTree *tree1, const ASTre
     return softEquals(replacedVariable, tree1, tree2, terms, allFreeForReplace, quantifiers);
 }
 
+bool eval(const ASTree *tree, bool a, bool b, bool c, const std::vector<std::string> &variables) {
+    if (tree->data.getId() == "->")
+        return !eval(tree->left, a, b, c, variables) || eval(tree->right, a, b, c, variables);
+    if (tree->data.getId() == "&")
+        return eval(tree->left, a, b, c, variables) && eval(tree->right, a, b, c, variables);
+    if (tree->data.getId() == "|")
+        return eval(tree->left, a, b, c, variables) || eval(tree->right, a, b, c, variables);
+    if (tree->data.getId() == "!")
+        return !eval(tree->left, a, b, c, variables);
 
+    if (tree->data.getId() == variables[0]) return a;
+    if (tree->data.getId() == variables[1]) return b;
+    if (tree->data.getId() == variables[2]) return c;
+
+    return false;
+}
+
+void replace(ASTree *&tree, ASTree *replaced1, ASTree *replaced2, ASTree *replaced3) {
+    if (tree->data.getId() == "P") {
+        tree = replaced1;
+        return;
+    }
+    if (tree->data.getId() == "Q") {
+        tree = replaced2;
+        return;
+    }
+    if (tree->data.getId() == "C") {
+        tree = replaced3;
+        return;
+    }
+    if (tree->left != nullptr)replace(tree->left, replaced1, replaced2, replaced3);
+    if (tree->right != nullptr)replace(tree->right, replaced1, replaced2, replaced3);
+}
+
+void replace(ASTree *&tree, ASTree *replaced1, ASTree *replaced2) {
+    if (tree->data.getId() == "P") {
+        tree = replaced1;
+        return;
+    }
+    if (tree->data.getId() == "Q") {
+        tree = replaced2;
+        return;
+    }
+    if (tree->left != nullptr)replace(tree->left, replaced1, replaced2);
+    if (tree->right != nullptr)replace(tree->right, replaced1, replaced2);
+}
+
+void replace(ASTree *&tree, ASTree *replaced) {
+    if (tree->data.getId() == "P") {
+        tree = replaced;
+        return;
+    }
+    if (tree->left != nullptr)replace(tree->left, replaced);
+    if (tree->right != nullptr)replace(tree->right, replaced);
+}
+
+ASTree *getCopy(ASTree *tree) {
+    if (tree == nullptr) return nullptr;
+    auto *node = new ASTree(tree->data, getCopy(tree->left), getCopy(tree->right));
+    return node;
+}

@@ -292,4 +292,14 @@ bool isArithmeticAxiomScheme(ASTree *tree, std::pair<std::string, int> &axiom) {
     return false;
 }
 
-
+ASTree *getAxiomTree(int number) {
+    std::string str;
+    if (number == 1) {
+        str = "P->(Q->P)";
+    } else if (number == 2) {
+        str = "(P->Q)->(P->Q->C)->(P->C)";
+    } else if (number == 8) {
+        str = "(P->Q)->(C->Q)->(P|C->Q)";
+    }
+    return parse(str);
+}

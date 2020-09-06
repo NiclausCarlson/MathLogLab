@@ -3,6 +3,8 @@
 //
 
 #include "RulesOfInference.h"
+#include "../Axioms/Axioms.h"
+#include "../PrimitiveProofs/PrimitiveProofs.h"
 
 bool isModusPonens(const std::map<std::string, int> &uniqueStatements,
                    const std::map<std::string, std::vector<std::pair<std::string, int>>> &moduses,
@@ -100,4 +102,69 @@ bool isQuantifierRule(const std::map<std::string, int> &uniqueStatements, ASTree
         }
     }
     return false;
+}
+
+void deduction(const std::vector<ASTree *> &proof, const std::vector<ASTree *> &hypo, ASTree *variable,
+               std::vector<ASTree *> &newProof) {
+    std::map<std::string, std::vector<std::pair<std::string, int>>> moduses;
+    std::map<std::string, int> uniqueStatements;
+    std::pair<std::string, int> axiom;
+    int index = 0;
+    for (const auto &i: proof) {
+        std::string a = toStringInfix(i);
+        bool has = false;
+        for (auto j : hypo) {
+            if (equals(i, j) && !equals(i, variable)) {
+                has = true;
+                break;
+            }
+        }
+        if (!has && equals(i, variable)) {
+            ASTree *axiom1 = getAxiomTree(1);
+            replace(axiom1, variable, variable);
+            ASTree *axiom11 = getAxiomTree(1);
+            replace(axiom11, variable, new ASTree(Implication(), variable, variable));
+            ASTree *axiom2 = getAxiomTree(2);
+            replace(axiom2, variable, new ASTree(Implication(), variable, variable), variable);
+
+            newProof.push_back(axiom1);
+            newProof.push_back(axiom11);
+            newProof.push_back(axiom2);
+            newProof.push_back(axiom2->right);
+            newProof.push_back(axiom2->right->right);
+            //    newProof.push_back(new ASTree(Variable("after deduction"), nullptr, nullptr));
+        } else if (has || isLogicAxiomScheme(i, axiom)) {
+            ASTree *axiom1 = getAxiomTree(1);
+            replace(axiom1, i, variable);
+            newProof.push_back(i);
+            newProof.push_back(axiom1);
+            newProof.push_back(axiom1->right);
+            //  newProof.push_back(new ASTree(Variable("Axiom or hypothesis"), nullptr, nullptr));
+        } else {
+            std::pair<std::string, std::pair<int, int>> pair;
+            bool q = isModusPonens(uniqueStatements, moduses, a, pair, false);
+            ASTree *axiom2 = getAxiomTree(2);
+            replace(axiom2, variable, proof[pair.second.second], i);
+            newProof.push_back(axiom2);
+            newProof.push_back(axiom2->right);
+            newProof.push_back(axiom2->right->right);
+            //   newProof.push_back(new ASTree(Variable("MP"), nullptr, nullptr));
+        }
+        uniqueStatements[a] = index;
+        if (i->data.getId() == "->") {
+            moduses[toStringInfix(i->right)].emplace_back(toStringInfix(i->left), index);
+        }
+        ++index;
+    }
+}
+
+void gluing(ASTree *tree, ASTree *withoutNeg, std::vector<ASTree *> &proof) {
+    PrimitiveProofs p;
+    ASTree *axiom8 = getAxiomTree(8);
+    replace(axiom8, withoutNeg, tree, new ASTree(Negation(), withoutNeg, nullptr));
+    proof.push_back(axiom8);
+    proof.push_back(axiom8->right);
+    proof.push_back(axiom8->right->right);
+    p.insertWithReplace(14, withoutNeg, proof);
+    proof.push_back(tree);
 }

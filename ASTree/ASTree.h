@@ -53,4 +53,14 @@ bool softEquals(char replacedVariable, const ASTree *tree1, const ASTree *tree2,
 bool isEqualsWithReplace(char replacedVariable, const ASTree *tree1, const ASTree *tree2,
                          std::vector<const ASTree *> &terms, bool &allFreeForReplace);
 
+bool eval(const ASTree *tree, bool a, bool b, bool c, const std::vector<std::string> &variables);
+
+void replace(ASTree *&tree, ASTree *replaced1, ASTree *replaced2,ASTree *replaced3);
+
+void replace(ASTree *&tree, ASTree *replaced1, ASTree *replaced2);
+
+void replace(ASTree *&tree, ASTree *replaced);
+
+ASTree *getCopy(ASTree *tree);
+
 #endif //MATHLOGLAB_ASTREE_H

@@ -25,6 +25,6 @@
 
 Expression getOperator(char ch);
 
-ASTree *parse(std::string &expression, bool mode);
+ASTree *parse(std::string &expression, bool mode = false, std::vector<std::string>* variables = nullptr);
 
 #endif //MATHLOGLAB_PARSER_H

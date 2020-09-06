@@ -27,7 +27,7 @@ Expression getOperator(char ch) {
     }
 }
 
-ASTree *parse(std::string &expression, bool mode = false) {
+ASTree *parse(std::string &expression, bool mode, std::vector<std::string> *variables) {
     std::stack<Expression> operators;
     std::stack<ASTree *> result;
     for (size_t i = 0; i < expression.size(); ++i) {
@@ -63,6 +63,11 @@ ASTree *parse(std::string &expression, bool mode = false) {
             }
             --i;
             Variable var(varName);
+            if (variables != nullptr) {
+                if (variables->size() != 3 &&
+                    std::find(variables->begin(), variables->end(), varName) == variables->end())
+                    variables->push_back(varName);
+            }
             addAloneNode(result, var);
         } else if ((isalpha(ch) || isdigit(ch)) && mode) {
             std::string name;
