@@ -1,7 +1,7 @@
 //
 // Created by Nik Carlson on 22.08.2020.
 //
-
+#define _CRT_SECURE_NO_WARNINGS
 
 #include <iostream>
 #include "Parser/Parser.h"
@@ -68,7 +68,7 @@ void printAns(const std::string &expression) {
 }
 
 int main() {
-
+    freopen("test", "r", stdin);
     std::iostream::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
